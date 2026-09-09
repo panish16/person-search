@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { goToSearchPage } from '../../utils/go-to-search'
 import { mockApiCallsForPage } from '../../mocks/playwright-mock-helpers'
 
 import { SearchAccess } from '../../../app/enums/search-access'
@@ -8,8 +9,7 @@ test.describe('Search Business - input', () => {
     await mockApiCallsForPage(page, SearchAccess.PUBLIC)
   })
   test('Displays expected search bar', async ({ page }) => {
-    await page.goto('/en-CA')
-    await page.waitForSelector('[data-testid=search-container]')
+    await goToSearchPage(page)
     expect(page.getByTestId('search-input-info-text'))
       .toHaveText('Search for businesses registered or incorporated in B.C. and access their business documents.')
     expect(page.getByTestId('search-input').getByTestId('search-textfield')).toBeVisible()

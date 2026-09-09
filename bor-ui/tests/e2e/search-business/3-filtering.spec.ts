@@ -1,4 +1,5 @@
 import { test, expect, type Locator, type Request } from '@playwright/test'
+import { goToSearchPage } from '../../utils/go-to-search'
 import { mockApiCallsForPage } from '../../mocks/playwright-mock-helpers'
 
 import { SearchAccess } from '../../../app/enums/search-access'
@@ -37,8 +38,7 @@ test.describe('Search Business - filtering', () => {
       await filter.click()
       await page.getByRole('option', { name: value }).click()
     }
-    await page.goto('/en-CA')
-    await page.waitForSelector('[data-testid=search-container]')
+    await goToSearchPage(page)
     expect(page.getByTestId('search-results-table')).not.toBeVisible()
     await page.getByTestId('search-input').getByTestId('search-textfield').click()
     await page.keyboard.press('a')

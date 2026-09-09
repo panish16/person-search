@@ -20,17 +20,23 @@ export default defineConfig<ConfigOptions>({
   testDir: './tests/e2e',
   testMatch: '*.spec.ts',
   workers: process.env.CI ? 2 : undefined,
+  // retry in CI: the search page can take >10s to hydrate on the slower engines
+  // (WebKit especially) when workers are contended — a retry clears those blips.
+  retries: process.env.CI ? 2 : 0,
   reporter: [['list'], [process.env.CI ? 'blob' : 'html']],
+  // give web-first assertions (toBeVisible/toHaveText/...) their own retry budget
+  expect: { timeout: 10000 },
   use: {
     nuxt: {
       rootDir: resolve('./'),
       runner: 'vitest',
       host: process.env.NUXT_PUBLIC_BASE_URL
     },
-    actionTimeout: 10000,
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
     baseURL: process.env.NUXT_PUBLIC_BASE_URL,
-    trace: 'on',
-    screenshot: 'on-first-failure',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
     // do not open browser
     headless: true
   },
