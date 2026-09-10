@@ -1,4 +1,5 @@
 import { test, expect, type Locator, type Request } from '@playwright/test'
+import { goToSearchPage } from '../../utils/go-to-search'
 
 import { mockApiCallsForPage } from '../../mocks/playwright-mock-helpers'
 import { SearchAccess } from '../../../app/enums/search-access'
@@ -39,8 +40,7 @@ test.describe('Search Person - extended/filters', () => {
       expect(clearButton).toBeVisible()
       await clearButton.click()
     }
-    await page.goto('/en-CA')
-    await page.waitForSelector('[data-testid=search-container]')
+    await goToSearchPage(page)
     // Select search people radio
     const searchPeopleRadio = page.getByTestId('search-radios').getByRole('radio', { name: 'Search People' })
     await searchPeopleRadio.click()

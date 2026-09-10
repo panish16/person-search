@@ -1,4 +1,5 @@
 import { test, expect, type Locator } from '@playwright/test'
+import { goToSearchPage } from '../../utils/go-to-search'
 
 import { mockApiCallsForPage } from '../../mocks/playwright-mock-helpers'
 import { SearchAccess } from '../../../app/enums/search-access'
@@ -10,8 +11,7 @@ test.describe('Search Directors', () => {
     await mockApiCallsForPage(page, SearchAccess.LIMITED)
   })
   test('Navigates and displays as expected in the search bar', async ({ page }) => {
-    await page.goto('/en-CA')
-    await page.waitForSelector('[data-testid=search-container]')
+    await goToSearchPage(page)
     // Verify search people radio
     const searchPeopleRadio = page.getByTestId('search-radios').getByRole('radio', { name: 'Search Directors' })
     expect(searchPeopleRadio).toBeVisible()
@@ -33,8 +33,7 @@ test.describe('Search Directors', () => {
   })
 
   test('Displays expected results after a search is triggered', async ({ page }) => {
-    await page.goto('/en-CA')
-    await page.waitForSelector('[data-testid=search-container]')
+    await goToSearchPage(page)
     expect(page.getByTestId('search-results-table')).not.toBeVisible()
     // Select search people radio
     await page.getByTestId('search-radios').getByRole('radio', { name: 'Search Directors' }).click()
@@ -125,8 +124,7 @@ test.describe('Search Directors', () => {
   })
 
   test('Table inner columns have the same width as their headers', async ({ page }) => {
-    await page.goto('/en-CA')
-    await page.waitForSelector('[data-testid=search-container]')
+    await goToSearchPage(page)
     expect(page.getByTestId('search-results-table')).not.toBeVisible()
     // Select search people radio
     await page.getByTestId('search-radios').getByRole('radio', { name: 'Search Directors' }).click()

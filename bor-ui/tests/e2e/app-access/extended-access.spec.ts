@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { goToSearchPage } from '../../utils/go-to-search'
 import { mockApiCallsForPage } from '../../mocks/playwright-mock-helpers'
 
 import { SearchAccess } from '../../../app/enums/search-access'
@@ -8,8 +9,7 @@ test.describe('App access - extended', () => {
     await mockApiCallsForPage(page, SearchAccess.EXTENDED)
   })
   test('Search page has expected elements', async ({ page }) => {
-    await page.goto('/en-CA')
-    await page.waitForSelector('[data-testid=search-container]')
+    await goToSearchPage(page)
     expect(page.getByRole('heading', { name: 'Business and Person Search' })).toBeVisible()
     expect(page.getByTestId('account-name')).toHaveText('Playwright')
     expect(page.getByTestId('user-name')).toHaveText('-')
